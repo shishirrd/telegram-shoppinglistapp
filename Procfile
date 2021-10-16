@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run stock_predictor.py
+web: python3 telegram_bot_heroku.py
