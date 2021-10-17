@@ -1,4 +1,1 @@
-#enable app in heroku
-python-telegram-bot>=12.7
-pandas>=1.2.4
-python-dateutil>=2.7.0
+python-telegram-bot==12.7
