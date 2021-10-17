@@ -1,16 +1,15 @@
 from setuptools import setup
 
 setup(
-	name='stock_predictor',
+	name='telegram_shopping_list',
 	author = 'Shishir Deshpande',
-	packages = ['stock_predictor',],
-	package_dir = {'stock_predictor':'stock_predictor',},
-	package_data = {'stock_predictor':['mappings/*.csv','sql/*.txt']},
+	packages = ['telegram_shopping_list',],
+	package_dir = {'telegram_shopping_list':'telegram_shopping_list',},
+	package_data = {'telegram_shopping_list':['mappings/*.csv','sql/*.txt']},
 	version='0.0.1',
-	description = 'library to help predict stock prices',
+	description = 'Bot to create, modify and share shopping lists directly on Telegram!',
 	install_requires=[
-        'pandas>=1.1.3',
-        'numpy>=1.17',
+        'python-telegram-bot>=12.7',
         'pyodbc',
     ],
 
