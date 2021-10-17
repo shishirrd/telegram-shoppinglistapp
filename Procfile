@@ -1,1 +1,1 @@
-web: python3 telegram_bot_heroku.py
+web: python3 bot.py
