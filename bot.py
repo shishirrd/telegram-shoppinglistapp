@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 
 import os
 PORT = int(os.environ.get('PORT',8443))
 
 
-# In[ ]:
+# In[2]:
 
 
 API_KEY = '2077563577:AAFruWz-P4oxbCHFPC1ptUlvjMjaYausaZw'
@@ -18,60 +18,52 @@ API_KEY = '2077563577:AAFruWz-P4oxbCHFPC1ptUlvjMjaYausaZw'
 
 # bot = telebot.TeleBot(API_KEY)
 
-# In[ ]:
+# def webhook(request):
+#     bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
+#     if request.method == "POST":
+#         update = telegram.Update.de_json(request.get_json(force=True), bot)
+#         chat_id = update.message.chat.id
+#         # Reply with the same message
+#         bot.sendMessage(chat_id=chat_id, text=update.message.text)
+#     return "ok"
+#     return "error"
 
+# def index():
+#     return webhook
 
-def webhook(request):
-    bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
-    if request.method == "POST":
-        update = telegram.Update.de_json(request.get_json(force=True), bot)
-        chat_id = update.message.chat.id
-        # Reply with the same message
-        bot.sendMessage(chat_id=chat_id, text=update.message.text)
-    return "ok"
-    return "error"
-
-
-# In[ ]:
-
-
-def index():
-    return webhook
-
-
-# In[ ]:
+# In[3]:
 
 
 #Define initial shopping list
 shopping_list = ['Apples','Bananas','Pears','Carrots','Potatoes']
 
 
-# In[ ]:
+# In[4]:
 
 
 import telegram.ext
 
 
-# In[ ]:
+# In[5]:
 
 
 updater = telegram.ext.Updater(API_KEY, use_context=True)
 
 
-# In[ ]:
+# In[6]:
 
 
 disp = updater.dispatcher
 
 
-# In[ ]:
+# In[7]:
 
 
 def hello(update, context):
     update.message.reply_text("Hello folks! Welcome to Shishir's shopping list bot!. Click on /start to get started!")
 
 
-# In[ ]:
+# In[8]:
 
 
 def main():
