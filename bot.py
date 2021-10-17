@@ -17,114 +17,65 @@ PORT = int(os.environ.get('PORT',8443))
 # In[ ]:
 
 
-API_KEY = '2077563577:AAFruWz-P4oxbCHFPC1ptUlvjMjaYausaZw'
+TOKEN = '2077563577:AAFruWz-P4oxbCHFPC1ptUlvjMjaYausaZw'
 
+import logging
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-# In[ ]:
+# Enable logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 
+logger = logging.getLogger(__name__)
 
-bot = telebot.TeleBot(API_KEY)
+# Define a few command handlers. These usually take the two arguments update and
+# context. Error handlers also receive the raised TelegramError object in error.
+def start(update, context):
+    """Send a message when the command /start is issued."""
+    update.message.reply_text('Hi!')
 
+def help(update, context):
+    """Send a message when the command /help is issued."""
+    update.message.reply_text('Help!')
 
-# In[ ]:
+def echo(update, context):
+    """Echo the user message."""
+    update.message.reply_text(update.message.text)
 
-
-#Define initial shopping list
-shopping_list = ['Apples','Bananas','Pears','Carrots','Potatoes']
-
-
-# In[ ]:
-
-
-import telegram.ext
-
-
-# In[ ]:
-
-
-updater = telegram.ext.Updater(API_KEY, use_context=True)
-
-
-# In[ ]:
-
-
-disp = updater.dispatcher
-
-
-# In[ ]:
-
-
-def hello(update, context):
-    update.message.reply_text("Hello folks! Welcome to Shishir's shopping list bot!. Click on /start to get started!")
-
-
-# In[ ]:
-
+def error(update, context):
+    """Log Errors caused by Updates."""
+    logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 def main():
-    #Define main menu for user to see when they first access the bot
-    def start(update, context):
-        #Print a menu for a user
-        update.message.reply_text("""Select an option for the action that you would like to do:
-1. Type /List to view shopping list
-2. Add item to list by typing '/Add' followed by the name of the item. Use '_' instead of space
-3. Remove item from list by typing '/Remove' followed by the name of the item. Use '_' instead of space
-4. Check if item is on the list by typing '/Check' followed by the name of the item. Use '_' instead of space
-5. Type /Count to check no. of items are on my list?
-6. Type /Clear to clear shopping list""")
-        
-    def viewList(update, context):
-        update.message.reply_text("Here's your list!")
-        update.message.reply_text(str(shopping_list))
-        
-    def addList(update, context):
-        item = context.args[0]
-        shopping_list.append(item)
-        update.message.reply_text(f"{item} has been added to the list!")
-        
-    def removeList(update, context):
-        item = context.args[0]
-        shopping_list.remove(item)
-        update.message.reply_text(f"{item} has been removed from the list!")
-        
-    #Define function for checking whether item is on list
-    def checkItem(update, context):
-        item = context.args[0] 
-        if item in shopping_list:
-            update.message.reply_text(f"Yes. {item} is on the list!")
-        else:
-            update.message.reply_text(f"No. {item} is not on the list! Would you like to add this?")
-            
-   #Define function for counting no. of items on list
-    def listLength(update, context):
-        count = len(shopping_list)
-        if count > 0:
-            update.message.reply_text(f"There are {count} items on the shopping list")
-        else:
-            update.message.reply_text("There are no items on the shopping list!")
-    
-    #Define function to clear shopping list and start over afresh
-    def clearList(update, context):
-        shopping_list.clear()
-        update.message.reply_text("Shopping list is now empty!")
-    
-    disp.add_handler(telegram.ext.CommandHandler("hello", hello))
-    disp.add_handler(telegram.ext.CommandHandler("start", start))
-    disp.add_handler(telegram.ext.CommandHandler("List", viewList))
-    disp.add_handler(telegram.ext.CommandHandler("Add", addList))
-    disp.add_handler(telegram.ext.CommandHandler("Remove", removeList))
-    disp.add_handler(telegram.ext.CommandHandler("Check", checkItem))
-    disp.add_handler(telegram.ext.CommandHandler("Count", listLength))
-    disp.add_handler(telegram.ext.CommandHandler("Clear", clearList))
-    
-    updater.start_webhook(listen="0.0.0.0", port = int(PORT), url_path = API_KEY, 
-                          webhook_url='https://shishir-telegram-shoppinglist.herokuapp.com/' + API_KEY)
+    """Start the bot."""
+    # Create the Updater and pass it your bot's token.
+    # Make sure to set use_context=True to use the new context based callbacks
+    # Post version 12 this will no longer be necessary
+    updater = Updater(TOKEN, use_context=True)
+
+    # Get the dispatcher to register handlers
+    dp = updater.dispatcher
+
+    # on different commands - answer in Telegram
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("help", help))
+
+    # on noncommand i.e message - echo the message on Telegram
+    dp.add_handler(MessageHandler(Filters.text, echo))
+
+    # log all errors
+    dp.add_error_handler(error)
+
+    # Start the Bot
+    updater.start_webhook(listen="0.0.0.0",
+                          port=int(PORT),
+                          url_path=TOKEN)
+    updater.bot.setWebhook('https://shishir-telegram-shoppinglist.herokuapp.com/' + TOKEN)
+
+    # Run the bot until you press Ctrl-C or the process receives SIGINT,
+    # SIGTERM or SIGABRT. This should be used most of the time, since
+    # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
-
-
-# In[ ]:
-
 
 if __name__ == '__main__':
     main()
-
