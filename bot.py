@@ -83,9 +83,8 @@ def main():
     disp.add_handler(telegram.ext.CommandHandler("Clear", clearList))
 
     updater.start_webhook(listen="0.0.0.0",
-                          port=int(PORT),
-                          url_path=API_KEY)
-    updater.bot.setWebhook('https://shishir-telegram-shoppinglist.herokuapp.com/' + API_KEY)
+                          port=int(PORT), url_path=API_KEY, 
+                          webhook_url='https://shishir-telegram-shoppinglist.herokuapp.com/' + API_KEY)
     updater.idle()
 
 if __name__ == '__main__':
