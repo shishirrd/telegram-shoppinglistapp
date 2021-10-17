@@ -1,7 +1,4 @@
-import requests
-import json
 import telebot
-import sys
 
 import os
 PORT = int(os.environ.get('PORT',5000))
